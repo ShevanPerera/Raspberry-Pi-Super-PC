@@ -1,0 +1,73 @@
+🔧 Step 1: Open config.txt
+Method A: Graphical (File Manager)
+Open File Manager (folder icon on the taskbar).
+
+Navigate to:
+
+Standard Raspberry Pi OS: /boot/config.txt
+
+Ubuntu-based OS (like TwisterOS): /boot/firmware/config.txt
+
+Right-click the file → Open with Text Editor.
+
+Method B: Terminal (Nano Editor)
+bash
+sudo nano /boot/config.txt
+(For Ubuntu-based OS, use /boot/firmware/config.txt instead.)
+
+📜 Step 2: Scroll to the VERY Bottom
+Press Page Down or scroll with your mouse until you see the last line of text.
+
+Look for blank space below all existing text (this is where you’ll add overclocking settings).
+
+Example of where to add settings (screenshot-like view):
+
+ini
+# Existing settings above...
+[pi4]
+max_framebuffers=2
+
+# 👇 ADD YOUR OVERCLOCK SETTINGS *HERE* (below everything else!) 👇
+over_voltage=6
+arm_freq=2100
+gpu_freq=750
+force_turbo=1
+(If the file is completely empty, just paste the lines at the top.)
+
+💾 Step 3: Save & Exit
+Nano Editor:
+
+Press Ctrl + X → Type Y → Press Enter.
+
+GUI Text Editor:
+
+Click File → Save (or Ctrl + S).
+
+⚡ Step 4: Reboot & Verify
+bash
+sudo reboot
+After rebooting, check if overclocking worked:
+
+bash
+vcgencmd measure_clock arm
+If it shows 2100000000, your Pi is now running at 2.1GHz!
+
+⚠️ Critical Notes
+Cooling is mandatory (use a fan/heatsink).
+
+Not all Pi 4Bs can hit 2.1GHz—if unstable, try arm_freq=2000.
+
+force_turbo=1 voids warranty (but gives max performance).
+
+❌ Troubleshooting
+Pi won’t boot?
+
+Hold Shift during boot to disable overclocking.
+
+Edit config.txt again and reduce values.
+
+🎯 Final Result
+✅ 20-30% faster performance (emulators, games, apps run smoother).
+✅ Feels like a "Super Pi" (without buying new hardware).
+
+Need a video guide or screenshot examples? Let me know! 🚀
