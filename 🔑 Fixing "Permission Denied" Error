@@ -1,0 +1,51 @@
+🔑 Fixing "Permission Denied" Error
+1. Use sudo for System Files
+bash
+sudo wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list
+2. Set Correct Permissions
+bash
+sudo chmod 644 /etc/apt/sources.list.d/box64.list
+3. Complete the Installation
+Run these commands one by one:
+
+bash
+# Add GPG key
+wget -qO- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/box64-debs-archive-keyring.gpg >/dev/null
+
+# Update packages
+sudo apt update
+
+# Install Box64
+sudo apt install box64 -y
+🚨 Important Notes
+Always use sudo when writing to system directories like /etc/
+
+If you get "gpg: command not found", install it first:
+
+bash
+sudo apt install gnupg -y
+✅ Verification
+Check if Box64 installed correctly:
+
+bash
+box64 --version
+(Should show version like "Box64 v0.2.5")
+
+❌ Still Having Issues?
+Check if the file exists:
+
+bash
+ls -l /etc/apt/sources.list.d/box64.list
+If missing, try creating the directory first:
+
+bash
+sudo mkdir -p /etc/apt/sources.list.d/
+💡 Alternative: Manual Download
+Download the file as your user:
+
+bash
+wget https://ryanfortner.github.io/box64-debs/box64.list
+Move it with sudo:
+
+bash
+sudo mv box64.list /etc/apt/sources.list.d/
