@@ -1,0 +1,61 @@
+📝 Creating Your First .sh File (3 Methods)
+Method 1: Desktop Right-Click (Easiest)
+Right-click on desktop → Create New → Blank File
+
+Name it launch_gta.sh (must end with .sh)
+
+Right-click the file → Open With Text Editor
+
+Paste your script (e.g., the GTA:SA launcher code below)
+
+Save (Ctrl+S) and close.
+
+Method 2: Terminal Commands
+bash
+# 1. Create the file
+nano ~/Desktop/launch_gta.sh
+
+# 2. Paste this basic GTA:SA launcher:
+#!/bin/bash
+cd "/home/pi/Games/GTA_SA"
+box64 wine gta-sa.exe -windowed -width 1024 -height 768
+
+# 3. Save: Press Ctrl+X → Y → Enter
+
+# 4. Make executable:
+chmod +x ~/Desktop/launch_gta.sh
+Method 3: Drag-and-Drop from USB
+Create the .sh file on another PC (Notepad++ or VS Code).
+
+Save with Unix line endings (LF, not CRLF).
+
+Copy to Pi desktop via USB.
+
+Right-click → Properties → Permissions → Check "Allow executing".
+
+▶️ Running the Script
+Double-click the .sh file → Choose "Execute in Terminal"
+(Or run manually in Terminal:)
+
+bash
+bash ~/Desktop/launch_gta.sh
+🔧 Troubleshooting
+Issue	Fix
+"Permission denied"	Run chmod +x filename.sh
+No .sh option	Use nano or right-click → "Create Document" → "Empty File"
+Windows line endings	Run sudo apt install dos2unix then dos2unix file.sh
+💡 Pro Tip: Sample GTA:SA Launcher
+bash
+#!/bin/bash
+export MESA_GL_VERSION_OVERRIDE=2.1
+export MESA_GLSL_VERSION_OVERRIDE=120
+cd "/home/pi/Games/GTA_SA"
+box64 wine gta-sa.exe -windowed -width 1024 -height 768 -norestrictions
+📌 Key Notes
+TwisterOS includes GUI text editors (right-click → Open With).
+
+All scripts must start with #!/bin/bash.
+
+Use chmod +x to make them executable.
+
+Need a video demo or screenshots? Ask! 🎥
