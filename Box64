@@ -1,0 +1,49 @@
+🛠️ Fixing "Must Explicitly Choose One" Error
+1. First, Update Your System
+bash
+sudo apt update && sudo apt upgrade -y
+2. Install Box64 Manually (Since It's Not in Default Repos)
+bash
+# Download and install Box64:
+wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list
+wget -qO- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/box64-debs-archive-keyring.gpg
+sudo apt update
+sudo apt install box64 -y
+3. Install Wine64
+bash
+sudo apt install wine64 -y
+✅ Verification
+Check if both installed correctly:
+
+bash
+box64 --version
+wine --version
+(Should show version numbers without errors)
+
+🔧 Alternative if Still Not Working
+If the above fails, use TwisterOS's pre-installed Wine:
+
+bash
+# Just run:
+wine /path/to/gta-sa.exe
+(TwisterOS usually includes Wine by default—no extra install needed!)
+
+🚨 Important Notes
+TwisterOS already includes Wine (check wine --version first before installing).
+
+Box64 may need manual install (as shown above).
+
+If you get "Unable to locate package", ensure your /etc/apt/sources.list has:
+
+bash
+deb http://archive.twisteros.com/ twister main
+📌 Need More Help?
+Reply with:
+
+The exact error message
+
+Output of lsb_release -a
+
+Whether you're using TwisterOS 32-bit or 64-bit
+
+I’ll give you tailored commands! 🛠️
