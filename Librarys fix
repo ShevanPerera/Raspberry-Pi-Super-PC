@@ -1,0 +1,55 @@
+🔧 Correct Installation Command
+bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install git cmake libopenal-dev libvorbisfile-dev libogg-dev \
+libsdl2-dev libpng-dev libglu1-mesa-dev libcurl4-openssl-dev -y
+📌 Key Fixes:
+libvorbis-dev → libvorbisfile-dev
+
+The correct package name for Vorbis audio support is libvorbisfile-dev.
+
+Verify SDL2 is installed properly
+
+Some systems need libsdl2-2.0-0 alongside the dev package.
+
+🚨 If You Still Get Errors
+1. Missing libglu1-mesa-dev (Common on RPi OS Lite)
+Fix:
+
+bash
+sudo apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev
+2. 32-bit vs 64-bit Issues
+If on Raspberry Pi OS (64-bit), some packages have different names:
+
+bash
+sudo apt install libvorbisidec-dev  # Alternative for 64-bit
+3. Manual Library Checks
+Verify if libraries exist:
+
+bash
+apt search libvorbis
+apt search libogg
+✅ Complete re3 Build Steps (Fixed)
+Install dependencies:
+
+bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install git cmake libopenal-dev libvorbisfile-dev libogg-dev \
+libsdl2-dev libpng-dev libglu1-mesa-dev libcurl4-openssl-dev -y
+Clone and build:
+
+bash
+git clone --depth 1 https://github.com/GTAmodding/re3.git
+cd re3
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j$(nproc)
+🛠️ Troubleshooting Table
+Error	Solution
+unable to locate package XYZ	Run apt search XYZ to find correct name
+CMake fails	Check CMakeLists.txt for missing deps
+SDL2 not found	Install libsdl2-image-dev libsdl2-mixer-dev
+💡 Pro Tip:
+If you’re on Raspberry Pi 4, performance will be very poor (GTA SA needs a PC/Android for playable FPS).
+
+For better results, compile on a x86 PC and copy the binary to the Pi.
