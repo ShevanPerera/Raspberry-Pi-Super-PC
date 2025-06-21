@@ -1,0 +1,97 @@
+🔍 Common Errors & Fixes
+1. Unable to locate package retroarch
+Cause: Outdated package list or incorrect OS.
+
+Fix:
+
+bash
+sudo apt update
+sudo apt install retroarch
+If still missing, ensure you're using Raspberry Pi OS (32-bit) (not 64-bit Lite).
+
+2. Failed to fetch / 404 Not Found
+Cause: Broken repository sources.
+
+Fix:
+
+bash
+sudo nano /etc/apt/sources.list
+Replace contents with:
+
+text
+deb http://archive.raspbian.org/raspbian bullseye main contrib non-free rpi
+Then:
+
+bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install retroarch
+3. Dependency errors (e.g., libretro-cores missing)
+Fix: Install dependencies manually:
+
+bash
+sudo apt install -f
+sudo apt install libretro-*
+4. Permission denied when running retroarch
+Fix:
+
+bash
+sudo chown -R $USER:$USER /home/pi
+retroarch
+5. Crashes/Black Screen on Launch
+Fix:
+
+Use a different video driver:
+
+bash
+sudo nano /opt/retropie/configs/all/retroarch.cfg
+Change:
+
+text
+video_driver = "gl"  # or "vulkan", "sdl2", "dispmanx"
+Reboot:
+
+bash
+sudo reboot
+🛠️ Alternative Installation Methods
+Method 1: Install via RetroPie Script
+bash
+cd
+git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
+sudo ./retropie_setup.sh
+Choose "Install" → "Binary-based installation".
+
+Method 2: Manual Build from Source
+bash
+sudo apt install git build-essential libsdl2-dev
+git clone https://github.com/libretro/RetroArch.git
+cd RetroArch
+./configure --enable-opengles --disable-ffmpeg --disable-sdl
+make -j4
+sudo make install
+💡 Still Stuck?
+Share the exact error (run the command again and paste the output).
+
+Check your OS:
+
+bash
+lsb_release -a
+uname -m
+Ensure it says Raspbian GNU/Linux 11 (bullseye) and armv7l/armhf (not 64-bit).
+
+Reinstall Raspberry Pi OS (if all else fails):
+
+Download: raspberrypi.com/software
+
+Flash to SD card using Raspberry Pi Imager.
+
+✅ Post-Install Tips
+Transfer ROMs to:
+
+text
+/home/pi/RetroPie/roms/
+Configure controllers:
+
+Launch RetroArch → Settings → Input.
+
+Optimize performance:
