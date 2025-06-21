@@ -1,52 +1,82 @@
-If you're encountering "unable to locate package" errors for all libraries (even after running sudo apt update), the issue is likely due to:
+1. Enable Debian Bullseye (Old-Stable) Repositories
+Some packages (e.g., libglu1-mesa-dev) are only available in Debian 11 (Bullseye). Temporarily add its repos:
 
-1. Incorrect APT Sources List
-Your Raspberry Pi OS might be pointing to outdated/wrong repositories.
-
-Fix: Reset APT Sources
 bash
-sudo nano /etc/apt/sources.list
-Replace the contents with:
+sudo nano /etc/apt/sources.list.d/bullseye.list
+Add:
 
 ini
-deb http://archive.raspbian.org/raspbian bullseye main contrib non-free rpi
-deb-src http://archive.raspbian.org/raspbian bullseye main contrib non-free rpi
-Then update:
+deb http://deb.debian.org/debian bullseye main contrib non-free
+Update and install:
 
 bash
 sudo apt update
-2. Raspberry Pi OS Version Mismatch
-If you're on Bookworm (Debian 12), some packages have been renamed/removed.
-
-If you're on 64-bit OS, some libraries need different names.
-
-Check Your OS:
-bash
-lsb_release -a   # Shows Debian version (e.g., Bullseye/Bookworm)
-uname -m         # Shows architecture (armv7l = 32-bit, aarch64 = 64-bit)
-Solutions:
-Issue	Fix
-Bookworm (Debian 12)	Use bullseye-backports or compile from source.
-64-bit OS	Install :armhf packages manually.
-Broken packages	Run sudo apt --fix-broken install.
-3. Network/Proxy Issues
-If apt update fails entirely:
+sudo apt -t bullseye install libglu1-mesa-dev libvorbis-dev
+2. Install aarch64 Alternatives
+For packages that do exist in Bookworm:
 
 bash
-ping archive.raspbian.org  # Check connectivity
-sudo nano /etc/resolv.conf # Set DNS to 8.8.8.8 if needed
-4. Manual Installation (Last Resort)
-If packages are truly missing, download .deb files manually:
+sudo apt install \
+  git cmake \
+  libopenal-dev \
+  libvorbisidec-dev \  # Replacement for libvorbis-dev
+  libogg-dev \
+  libsdl2-dev \
+  libpng-dev \
+  libcurl4-openssl-dev \
+  libgl1-mesa-dev      # Replaces libglu1-mesa-dev
+3. Build Missing Libraries from Source
+If a package (e.g., libglu1-mesa-dev) is entirely missing:
 
 bash
-wget http://ftp.debian.org/debian/pool/main/libv/libvorbis/libvorbis-dev_1.3.7-1_armhf.deb
-sudo dpkg -i libvorbis-dev_1.3.7-1_armhf.deb
-Find packages at: Debian Packages
+# Install build tools
+sudo apt install build-essential meson ninja-build
 
-Still Not Working?
-Reinstall Raspberry Pi OS (via Imager)
-
-Use Docker (pre-configured environment):
+# Build libGLU
+git clone https://gitlab.freedesktop.org/mesa/glu.git
+cd glu
+meson builddir/
+ninja -C builddir/
+sudo ninja -C builddir/ install
+4. Cross-Compile re3 for aarch64
+Since the Pi 4/5 struggles with GTA:SA, compile on a x86_64 PC and transfer the binary:
 
 bash
-docker pull ghcr.io/gta-modding/re3:latest
+# On a PC (Linux)
+git clone --depth 1 https://github.com/GTAmodding/re3.git
+cd re3
+mkdir build && cd build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/Toolchain-aarch64-linux-gnu.cmake
+make -j$(nproc)
+
+# Copy to Raspberry Pi
+scp re3 pi@raspberrypi.local:~/re3/
+5. Key Workarounds
+Missing Package	Solution
+libglu1-mesa-dev	Build from source (above)
+libvorbis-dev	Use libvorbisidec-dev
+libopenal-dev	Install libopenal1-dev
+6. Verify Dependencies
+Check if libraries are detected:
+
+bash
+pkg-config --modversion vorbis
+pkg-config --modversion glu
+🚨 Critical Note
+Performance will be terrible on Pi 4/5 (even if it compiles).
+
+For playable GTA:SA, use:
+
+Android version (Play Store)
+
+x86 PC (even a $50 used laptop runs it better).
+
+Still Stuck?
+Reply with:
+
+Exact error from cmake ..
+
+Output of:
+
+bash
+apt policy libglu1-mesa-dev libvorbis-dev
