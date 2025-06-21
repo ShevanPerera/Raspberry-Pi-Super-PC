@@ -1,0 +1,52 @@
+If you're encountering "unable to locate package" errors for all libraries (even after running sudo apt update), the issue is likely due to:
+
+1. Incorrect APT Sources List
+Your Raspberry Pi OS might be pointing to outdated/wrong repositories.
+
+Fix: Reset APT Sources
+bash
+sudo nano /etc/apt/sources.list
+Replace the contents with:
+
+ini
+deb http://archive.raspbian.org/raspbian bullseye main contrib non-free rpi
+deb-src http://archive.raspbian.org/raspbian bullseye main contrib non-free rpi
+Then update:
+
+bash
+sudo apt update
+2. Raspberry Pi OS Version Mismatch
+If you're on Bookworm (Debian 12), some packages have been renamed/removed.
+
+If you're on 64-bit OS, some libraries need different names.
+
+Check Your OS:
+bash
+lsb_release -a   # Shows Debian version (e.g., Bullseye/Bookworm)
+uname -m         # Shows architecture (armv7l = 32-bit, aarch64 = 64-bit)
+Solutions:
+Issue	Fix
+Bookworm (Debian 12)	Use bullseye-backports or compile from source.
+64-bit OS	Install :armhf packages manually.
+Broken packages	Run sudo apt --fix-broken install.
+3. Network/Proxy Issues
+If apt update fails entirely:
+
+bash
+ping archive.raspbian.org  # Check connectivity
+sudo nano /etc/resolv.conf # Set DNS to 8.8.8.8 if needed
+4. Manual Installation (Last Resort)
+If packages are truly missing, download .deb files manually:
+
+bash
+wget http://ftp.debian.org/debian/pool/main/libv/libvorbis/libvorbis-dev_1.3.7-1_armhf.deb
+sudo dpkg -i libvorbis-dev_1.3.7-1_armhf.deb
+Find packages at: Debian Packages
+
+Still Not Working?
+Reinstall Raspberry Pi OS (via Imager)
+
+Use Docker (pre-configured environment):
+
+bash
+docker pull ghcr.io/gta-modding/re3:latest
