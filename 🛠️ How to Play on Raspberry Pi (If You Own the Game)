@@ -1,0 +1,20 @@
+🛠️ How to Play on Raspberry Pi (If You Own the Game)
+Option 1: Re3 (Reverse-Engineered PC Port)
+Install on Raspberry Pi OS (64-bit):
+
+bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install git cmake libopenal-dev libvorbis-dev libogg-dev \
+libsdl2-dev libpng-dev libglu1-mesa-dev libcurl4-openssl-dev -y
+git clone --depth 1 https://github.com/GTAmodding/re3.git
+cd re3
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+Copy LEGAL game files from your purchased PC version to the gamefiles folder.
+
+Run:
+
+bash
+./re3
+*(Note: Performance is limited on RPi 4/5.)*
